@@ -40,3 +40,14 @@ export const getCommentsByPost = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch comments" });
   }
 };
+
+export const getMyComments = async (req, res) => {
+  const comments = await Comment.find({ user: req.user.id })
+    .populate("post", "title")
+    .sort({ createdAt: -1 });
+
+  res.status(200).json({
+    message: "User comments retrieved",
+    comments
+  });
+};
