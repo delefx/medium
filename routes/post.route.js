@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.post("/", uploadMiddleware, auth, createPost);
 router.get("/", auth, getAllPosts);
+router.get("/:id", auth, getSinglePost);
 router.post("/like/:id", auth, likePost);
 router.post("/dislike/:id", auth, dislikePost);
 router.get("/my-posts", auth, getMyPosts);

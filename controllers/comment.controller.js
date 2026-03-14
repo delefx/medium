@@ -7,4 +7,4 @@ export const addComment = async (req, res) => {
         text: req.body.text
     });
     res.status(201).json({message: "Comment added successfully", comment});
-}
+} 

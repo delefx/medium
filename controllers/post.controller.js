@@ -23,6 +23,22 @@ export const getMyPosts = async (req, res) => {
     res.status(200).json({message: "My posts retrieved successfully", posts});
 }
 
+export const getSinglePost = async (req, res) => {
+    const { id } = req.params;
+
+    const post = await Post.findById(id)
+        .populate("author", "-password");
+
+    if (!post) {
+        return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.status(200).json({
+        message: "Post retrieved successfully",
+        post
+    });
+};
+
 export const deletePost = async (req, res) => {
     const { id } = req.params;
     const post = await Post.findOneAndDelete({_id: req.params.id, author: req.user.id});
