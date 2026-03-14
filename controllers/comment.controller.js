@@ -53,13 +53,18 @@ export const getMyComments = async (req, res) => {
 };
 
 export const getAllComments = async (req, res) => {
-  const comments = await Comment.find()
-    .populate("user", "username avatar")
-    .populate("post", "title")
-    .sort({ createdAt: -1 });
-};
+  try {
+    const comments = await Comment.find()
+      .populate("user", "username avatar") // get username + avatar
+      .populate("post", "title")           // get post title
+      .sort({ createdAt: -1 });            // newest first
 
-res.status(200).json({
-  message: "All comments retrieved",
-  comments
-});
+    res.status(200).json({
+      message: "All comments retrieved",
+      comments
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to retrieve comments" });
+  }
+};
