@@ -19,6 +19,22 @@ export const updateProfile = async (req, res) => {
     res.status(200).json({message: "Profile updated successfully", user});
 }
 
+export const deleteUser = async (req, res) => {
+  try {
+
+    await User.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      message: "User deleted successfully"
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      message: "Failed to delete user"
+    });
+  }
+};
+
 export const getallUsers = async (req, res) => {
     const users = await User.find().select("-password");
     res.status(200).json({message: "Users retrieved successfully", users});
