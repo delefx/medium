@@ -18,3 +18,8 @@ export const updateProfile = async (req, res) => {
     if(!user) return res.status(404).json({message: "User not found"});
     res.status(200).json({message: "Profile updated successfully", user});
 }
+
+export const getallUsers = async (req, res) => {
+    const users = await User.find().select("-password");
+    res.status(200).json({message: "Users retrieved successfully", users});
+}
