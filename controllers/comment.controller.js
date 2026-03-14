@@ -51,3 +51,15 @@ export const getMyComments = async (req, res) => {
     comments
   });
 };
+
+export const getAllComments = async (req, res) => {
+  const comments = await Comment.find()
+    .populate("user", "username avatar")
+    .populate("post", "title")
+    .sort({ createdAt: -1 });
+};
+
+res.status(200).json({
+  message: "All comments retrieved",
+  comments
+});
