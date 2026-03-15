@@ -1,4 +1,5 @@
 import Post from "../models/post.model.js";
+import Comment from "../models/comment.model.js";
 
 export const createPost = async (req, res) => {
     const { title, content } = req.body;
@@ -40,11 +41,31 @@ export const getSinglePost = async (req, res) => {
 };
 
 export const deletePost = async (req, res) => {
-    const { id } = req.params;
-    const post = await Post.findOneAndDelete({_id: req.params.id, author: req.user.id});
-    if(!post) return res.status(404).json({message: "Post not found or unauthorized"});
-    res.status(200).json({message: "Post deleted successfully"});
-}
+  try {
+
+    const post = await Post.findOneAndDelete({
+      _id: req.params.id,
+      author: req.user.id
+    });
+
+    if (!post) {
+      return res.status(404).json({
+        message: "Post not found or unauthorized"
+      });
+    }
+
+    await Comment.deleteMany({ post: req.params.id });
+
+    res.status(200).json({
+      message: "Post and its comments deleted"
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      message: "Failed to delete post"
+    });
+  }
+};
 
 export const likePost = async (req, res) => {
     const post = await Post.findById(req.params.id);

@@ -68,3 +68,34 @@ export const getAllComments = async (req, res) => {
     res.status(500).json({ message: "Failed to retrieve comments" });
   }
 };
+
+export const deleteComment = async (req, res) => {
+  try {
+
+    const { id } = req.params;
+
+    const comment = await Comment.findOneAndDelete({
+      _id: id,
+      user: req.user.id
+    });
+
+    if (!comment) {
+      return res.status(404).json({
+        message: "Comment not found or unauthorized"
+      });
+    }
+
+    res.status(200).json({
+      message: "Comment deleted successfully"
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      message: "Failed to delete comment"
+    });
+
+  }
+};

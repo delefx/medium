@@ -1,6 +1,6 @@
 
 import express from "express";
-import { addComment, getCommentsByPost, getMyComments, getAllComments } from "../controllers/comment.controller.js";
+import { addComment, getCommentsByPost, getMyComments, getAllComments, deleteComment } from "../controllers/comment.controller.js";
 import { auth } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
@@ -9,6 +9,8 @@ const router = express.Router();
 router.post("/", auth, addComment);
 
 router.get("/me", auth, getMyComments);
+
+router.delete("/:id", auth, deleteComment);
 
 // Get all comments for a post
 router.get("/:postId", getCommentsByPost);
