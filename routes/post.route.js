@@ -7,7 +7,7 @@ import { likePost, dislikePost, getMyPosts } from '../controllers/post.controlle
 
 const router = express.Router();
 
-router.post("/", uploadMiddleware, auth, createPost);
+router.post("/", auth, uploadMiddleware, createPost);
 
 router.get("/", auth, getAllPosts);
 

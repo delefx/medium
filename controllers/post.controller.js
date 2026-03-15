@@ -2,6 +2,9 @@ import Post from "../models/post.model.js";
 import Comment from "../models/comment.model.js";
 
 export const createPost = async (req, res) => {
+
+    console.log("FILES:", req.files);
+
     const { title, content } = req.body;
     const backCover = req.files?.backCover?.[0]?.path || null;
 
