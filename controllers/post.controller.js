@@ -71,19 +71,47 @@ export const deletePost = async (req, res) => {
 };
 
 export const likePost = async (req, res) => {
+  try {
     const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    // Remove from dislikes if it exists
     post.dislikes.pull(req.user.id);
+    // Add to likes (no duplicates)
     post.likes.addToSet(req.user.id);
+
     await post.save();
-    res.status(200).json({message: "Post liked successfully"});
-    if(!post) return res.status(404).json({message: "Post not found"});
-}
+
+    res.status(200).json({
+      message: "Post liked successfully",
+      likes: post.likes,
+      dislikes: post.dislikes
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
 
 export const dislikePost = async (req, res) => {
+  try {
     const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    // Remove from likes if it exists
     post.likes.pull(req.user.id);
+    // Add to dislikes
     post.dislikes.addToSet(req.user.id);
+
     await post.save();
-    res.status(200).json({message: "Post disliked successfully"});
-    if(!post) return res.status(404).json({message: "Post not found"});
-}
+
+    res.status(200).json({
+      message: "Post disliked successfully",
+      likes: post.likes,
+      dislikes: post.dislikes
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
